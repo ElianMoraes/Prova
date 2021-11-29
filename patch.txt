@@ -1,0 +1,1 @@
+source C:/Users/Desenvolvimento/Desktop/prova/script.sql
