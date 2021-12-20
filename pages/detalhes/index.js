@@ -1,17 +1,28 @@
 import React from 'react'
-import { View, Text, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text } from 'react-native'
 import style from './style.js'
-export default function Home({ navigation }) {
+export default function Detalhes({ navigation, route }) {
+
+    const { nome, habilidade } = route.params;
+    
+    const pokemon = { "nome": habilidade }
+    
+    const confirmar = () => {
+        let url = "https://pokeapi.co/api/v2/pokemon/" + pokemon;
+        fetch(url, {
+            method: "PUT"
+        })
+            .then(resp => { return resp.status })
+            .then(data => { if (data == 200) navigation.navigate('Listar pokemon',pokemon) })
+    }
+
     return (
         <View style={style.pag}>
-            <Text style={{margin:12, fontSize:16, textAlign:'center',fontWeight:'bold'}}>Cliente: Rodrigo Viera</Text>
-            <Text style={{margin:12, fontSize:16, textAlign:'center',fontWeight:'bold'}}>Pedido: Pizza de Calabresa</Text>
-            <Text style={{margin:12, fontSize:16, textAlign:'center',fontWeight:'bold'}}>Valor: 33,50</Text>
-            <Text style={{margin:12, fontSize:16, textAlign:'center',fontWeight:'bold'}}>Data: 16/12/2021</Text>
-
-            <TouchableOpacity style={style.menu} onPress={() => { navigation.navigate('Entregas') }}>
-                <Text style={{margin:12,fontSize:20, textAlign:'center',fontWeight:'bold'}}>Concluir Pedido</Text>
-            </TouchableOpacity>
+            <View style={style.detalhe}>
+                <View style={style.linha}><Text>Nome Pokemon:</Text><Text>{nome}</Text></View>
+                <View style={style.linha}><Text>Habilidade:</Text><Text>{habilidade}</Text></View>
+               
+            </View>
         </View>
-    )    
+    )
 }

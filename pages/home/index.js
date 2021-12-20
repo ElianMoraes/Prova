@@ -1,28 +1,36 @@
-import React from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
 import style from './style.js'
 export default function Home({ navigation }) {
-    return(
-        <View style={style.pag}>
-                <Text style={{margin:12,fontSize:25, textAlign:'center',fontWeight:'bold'}}>Quem é Você ?</Text>
-            <TouchableOpacity style={style.menu} onPress={() => { navigation.navigate('Entregas') }}>
-                <Text style={{margin:12, backgroundColor:"white", fontSize:20, textAlign:'center',fontWeight:'bold'}}>Joãozin</Text>
+    const [lista, setlista] = useState([
+
+    ])
+     
+    useEffect(() => {
+        fetch("https://pokeapi.co/api/v2/pokemon", {
+            "method": "GET",
+            "headers": {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            } 
+        }).then(resp => {
+            return resp.json()
+        }).then(data => {
+            setlista(data.results);
+        }).catch(err => {    
+        }); 
+    }, 
+    []);
+
+    return (
+    <View style={style.pag}>
+        {lista.map((item, index) =>
+            <TouchableOpacity style={style.menu} key={index} onPress={() => { navigation.navigate('Detalhes', item) }}>
+            <Image style={style.icone} source={require('../../assets/pokebola.png')}></Image>
+            <Text>{item.name}</Text>
+            <Image style={style.img} source={{uri:'https://www.global-esports.news/wp-content/uploads/2021/08/These-are-the-strongest-and-weakest-Pokemon%E2%80%8E.jpg'}}/>
             </TouchableOpacity>
-            <TouchableOpacity style={style.menu} onPress={() => { navigation.navigate('Entregas') }}>
-                <Text style={{margin:12, backgroundColor:"white",fontSize:20, textAlign:'center', fontWeight:'bold'}}>Clebin</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={style.menu} onPress={() => { navigation.navigate('Entregas') }}>
-                <Text style={{margin:12, backgroundColor:"white",fontSize:20, textAlign:'center',fontWeight:'bold'}}>Zezin</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={style.menu} onPress={() => { navigation.navigate('Entregas') }}>
-                <Text style={{margin:12, backgroundColor:"white",fontSize:20, textAlign:'center',fontWeight:'bold'}}>Reginaldo</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={style.menu} onPress={() => { navigation.navigate('Entregas') }}>
-                <Text style={{margin:12, backgroundColor:"white",fontSize:20, textAlign:'center',fontWeight:'bold'}}>Gil</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={style.menu} onPress={() => { navigation.navigate('Entregas') }}>
-                <Text style={{margin:12, backgroundColor:"white",fontSize:20, textAlign:'center',fontWeight:'bold'}}>Bielsa</Text>
-            </TouchableOpacity>
-        </View>
-    )
-}            
+            )}
+    </View>
+)}
+
